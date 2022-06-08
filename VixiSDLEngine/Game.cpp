@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "TextureManager.h"
+#include "GameObject.h"
 
-SDL_Texture* texture;
-SDL_Rect srcR, destR;
+GameObject* player;
+GameObject* enemy;
 
 Game::Game() 
 {
@@ -46,7 +47,8 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	}
 
 
-	texture = TextureManager::LoadTexture("assets/wizard_32x32.png", renderer);
+	player = new GameObject("assets/wizard_32x32.png", renderer, 0, 0, 32, 32, scale);
+	enemy = new GameObject("assets/draziw_32x32.png", renderer, 50, 50, 32, 32, scale);
 
 }
 void Game::handleEvents()
@@ -68,16 +70,17 @@ void Game::update()
 	delta = (SDL_GetTicks() - lastUpdateEnd) / 1000.0f;
 	
 	// update
-	destR.h = 32 *scale;
-	destR.w = 32 *scale;
-	std::cout << delta << std::endl;
+	player->Update();
+	enemy->Update();
+
 	lastUpdateEnd = SDL_GetTicks();
 }
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 	// draw stuff to render
-	SDL_RenderCopy(renderer, texture, NULL, &destR);
+	player->Render();
+	enemy->Render();
 
 	SDL_RenderPresent(renderer);
 }
