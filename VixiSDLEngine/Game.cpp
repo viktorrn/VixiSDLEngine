@@ -1,21 +1,35 @@
 #include "Game.h"
 #include "TextureManager.h"
-#include "GameObject.h"
+#include "Map.h"
+#include "Vector2D.h"
+#include "ECS/Components.h"
 
-GameObject* player;
-GameObject* enemy;
+Map* map;
+
+SDL_Renderer* Game::renderer = nullptr;
+float Game::drawScale = 1.0f;
+Uint8 Game::tileSize = 1;
+
+Manager manager;
+SDL_Event Game::event;
+auto& player(manager.addEntity());
 
 Game::Game() 
 {
-
 }
 Game::~Game()
 {
 
 }
-void Game::init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
+void Game::Init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
+	
+	// some required setting values
+	drawScale = 2.0f;
+	tileSize = 32;
+
+
 	if (fullscreen)
 	{
 		flags = SDL_WINDOW_FULLSCREEN;
@@ -24,7 +38,7 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
 		std::cout << "Subsystem init" << std::endl;
-		window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		window = SDL_CreateWindow(title, xpos, ypos, width*tileSize, height * tileSize, flags);
 		
 		if (window) 
 		{
@@ -46,14 +60,17 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 		std::cout << "game failed to initialized, error!!!" << std::endl;
 	}
 
+	map = new Map(20,12);
 
-	player = new GameObject("assets/wizard_32x32.png", renderer, 0, 0, 32, 32, scale);
-	enemy = new GameObject("assets/draziw_32x32.png", renderer, 50, 50, 32, 32, scale);
+	player.addComponent<TransformComponent>(50,100);
+	player.addComponent<SpriteComponent>("assets/wizard_32x32.png");
+	
 
 }
-void Game::handleEvents()
+void Game::HandleEvents()
 {
-	SDL_Event event;
+
+
 	SDL_PollEvent(&event);
 	
 	switch (event.type) {
@@ -65,26 +82,31 @@ void Game::handleEvents()
 	};
 	
 }
-void Game::update()
+void Game::Update()
 {
 	delta = (SDL_GetTicks() - lastUpdateEnd) / 1000.0f;
 	
 	// update
-	player->Update();
-	enemy->Update();
+	manager.Refresh();
+	manager.Update();
+	player.getComponent<TransformComponent>().position += Vector2D(2, 0);
+	if (player.getComponent<TransformComponent>().position.x > 100)
+	{
+		player.getComponent<SpriteComponent>().SetTexture("assets/draziw_32x32.png");
+	}
 
 	lastUpdateEnd = SDL_GetTicks();
 }
-void Game::render()
+void Game::Render()
 {
 	SDL_RenderClear(renderer);
 	// draw stuff to render
-	player->Render();
-	enemy->Render();
+	map->DrawMap();
+	manager.Draw();
 
 	SDL_RenderPresent(renderer);
 }
-void Game::clean()
+void Game::Clean()
 {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
