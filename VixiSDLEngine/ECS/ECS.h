@@ -45,7 +45,7 @@ private:
 	ComponentBitSet componentBitSet;
 
 public:
-	void Update()
+	void Update() 
 	{
 		for (auto& c : components) c->Update();
 	}
@@ -60,7 +60,7 @@ public:
 		return componentBitSet[getComponentTypeID<T>()];
 	}
 
-	template <typename T, typename... TArgs>
+	template <typename T, typename... TArgs> 
 	T& addComponent(TArgs&&... mArgs)
 	{	
 		T* c(new T(std::forward<TArgs>(mArgs)...));
@@ -74,7 +74,7 @@ public:
 		c->Init();
 		return *c;
 	}
-
+	
 	template <typename T> T& getComponent() const
 	{
 		auto ptr(componentArray[getComponentTypeID<T>()]);

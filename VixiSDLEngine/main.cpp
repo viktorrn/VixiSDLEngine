@@ -9,8 +9,7 @@ int main(int argc, char *argv[])
 {
 	game = new Game();
 	const int FPS = 60;
-	const float frameDelay = 1000.0f / FPS;
-
+	const int frameDelay = 1000 / FPS;
 
 	Uint32 frameStart;
 	int frameTime;
@@ -19,13 +18,14 @@ int main(int argc, char *argv[])
 
 	while(game->Running())
 	{
-		frameStart = SDL_GetTicks();
+		frameStart = SDL_GetPerformanceCounter();
+
 
 		game->HandleEvents();
 		game->Update();
 		game->Render();
 
-		frameTime = SDL_GetTicks() - frameStart;
+		frameTime = SDL_GetPerformanceCounter() - frameStart;
 
 		if (frameDelay > frameTime)
 		{

@@ -8,7 +8,11 @@ public:
 	Vector2D position;
 	Vector2D velocity;
 
-	float speed = 3.0f;
+	int height = Game::tileSize;
+	int width = Game::tileSize;
+	int scale = 1;
+
+	float speed = 32.0f;
 
 	TransformComponent()
 	{
@@ -20,6 +24,20 @@ public:
 		position.x = x;
 		position.y = y;
 	}
+	TransformComponent(int w, int h)
+	{
+		position.y = 0.0f;
+		position.x = 0.0f;
+		this->height = w;
+		this->width = h;
+	}
+	TransformComponent(float x, float y, int w, int h)
+	{
+		position.x = x;
+		position.y = y;
+		this->height = w;
+		this->width = h;
+	}
 
 	void Init() override
 	{
@@ -29,6 +47,6 @@ public:
 
 	void Update() override
 	{
-		position += (velocity *= Vector2D(speed, speed));
+		position += (velocity *= Vector2D(speed * Game::delta, speed * Game::delta) );
 	}
 };

@@ -16,6 +16,18 @@
     <Filter Include="Header Files\ECS">
       <UniqueIdentifier>{f62c566f-93ce-4a2c-a974-d570706b3958}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{10737bf5-6047-4d4c-8d9c-fcdf41c1de4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{54b52944-ad61-4329-94b7-09ab1b3848f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DataStructs">
+      <UniqueIdentifier>{4acc5cff-b474-4fb0-94c0-656920f9f73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DataStructs">
+      <UniqueIdentifier>{e4388272-6a9f-4805-8f95-bbfb0a878de9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -27,14 +39,17 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Managers\Collision.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\TextureManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
     <ClCompile Include="Vector2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DataStructs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libDependecies.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
@@ -65,8 +77,20 @@
     <ClInclude Include="ECS\SpriteComponent.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\KeyboardController.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\ColliderComponent.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
     <ClInclude Include="Vector2D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\DataStructs</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\TextureManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Collision.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

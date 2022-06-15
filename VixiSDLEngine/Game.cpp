@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "TextureManager.h"
+#include "Managers/TextureManager.h"
 #include "Map.h"
 #include "Vector2D.h"
 #include "ECS/Components.h"
@@ -8,6 +8,7 @@ Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 float Game::drawScale = 1.0f;
+double Game::delta = 1.0f;
 Uint8 Game::tileSize = 1;
 
 Manager manager;
@@ -64,7 +65,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 
 	player.addComponent<TransformComponent>(50,100);
 	player.addComponent<SpriteComponent>("assets/wizard_32x32.png");
-	
+	player.addComponent<KeyboardController>();
 
 }
 void Game::HandleEvents()
@@ -84,18 +85,24 @@ void Game::HandleEvents()
 }
 void Game::Update()
 {
-	delta = (SDL_GetTicks() - lastUpdateEnd) / 1000.0f;
-	
+
+	Uint64 now = SDL_GetPerformanceCounter();
+	Game::delta = 1000.0f / (now - lastUpdateEnd);
+	//std::cout << delta << std::endl;
+	lastUpdateEnd = now;
+
+	float dt = 1.0f/60.0f;
+	if (delta > dt)
+	{
+		delta = dt;
+	}
+	delta = dt;
+
 	// update
 	manager.Refresh();
 	manager.Update();
-	player.getComponent<TransformComponent>().position += Vector2D(2, 0);
-	if (player.getComponent<TransformComponent>().position.x > 100)
-	{
-		player.getComponent<SpriteComponent>().SetTexture("assets/draziw_32x32.png");
-	}
 
-	lastUpdateEnd = SDL_GetTicks();
+	
 }
 void Game::Render()
 {

@@ -17,6 +17,11 @@ public:
 	{
 		SetTexture(path);
 	}
+	
+	~SpriteComponent()
+	{
+		SDL_DestroyTexture(texture);
+	}
 
 	void SetTexture(const char* path)
 	{
@@ -27,14 +32,17 @@ public:
 	{
 		transform = &entity->getComponent<TransformComponent>();
 		srcRect.x = srcRect.y = 0;
-		srcRect.w = srcRect.h = Game::tileSize;
-		destRect.w = destRect.h = Game::tileSize*2;
+		srcRect.w = transform->width * transform->scale;
+		srcRect.h = transform->height * transform->scale;
+		
 	}
 
 	void Update() override
 	{
-		destRect.x = (int)transform->position.x;
-		destRect.y = (int)transform->position.y;
+		destRect.x = (int)(floor(transform->position.x+0.5));
+		destRect.y = (int)(floor(transform->position.y+0.5));
+		destRect.w = transform->width * transform->scale;
+		destRect.h = Game::tileSize * 2;
 	}
 
 	void Draw() override
