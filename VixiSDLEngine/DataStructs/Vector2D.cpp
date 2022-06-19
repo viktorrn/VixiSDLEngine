@@ -71,6 +71,13 @@ Vector2D& operator*(Vector2D& v1, float f)
 	return v1;
 }
 
+Vector2D& operator*(Vector2D& v1, int i)
+{
+	v1.x *= i;
+	v1.y *= i;
+	return v1;
+}
+
 std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
 {
 	stream << "(" << vec.x << "," << vec.y << ")";
@@ -108,7 +115,28 @@ Vector2D& Vector2D::operator*=(const double f)
 	return *this;
 }
 
+Vector2D& Vector2D::operator*=(const int i)
+{
+	this->x *= i;
+	this->y *= i;
+	return *this;
+}
+
 Vector2D& Vector2D::operator/=(const Vector2D& vec)
 {
 	return this->Divide(vec);
+}
+
+Vector2D& Vector2D::operator*(const int i)
+{
+	this->x *= i;
+	this->y *= i;
+	return *this;
+}
+
+void Vector2D::Zero()
+{
+	this->x = 0;
+	this->y = 0;
+
 }

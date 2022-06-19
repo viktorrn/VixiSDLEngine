@@ -39,17 +39,20 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\Collision.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Managers\TextureManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2D.cpp">
+    <ClCompile Include="DataStructs\Vector2D.cpp">
       <Filter>Source Files\DataStructs</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Map.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\ECS.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,9 +63,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libDependecies.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\ECS.h">
@@ -83,13 +83,19 @@
     <ClInclude Include="ECS\ColliderComponent.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2D.h">
-      <Filter>Header Files\DataStructs</Filter>
-    </ClInclude>
     <ClInclude Include="Managers\TextureManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Managers\Collision.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructs\Vector2D.h">
+      <Filter>Header Files\DataStructs</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS\TileComponent.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Map.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>

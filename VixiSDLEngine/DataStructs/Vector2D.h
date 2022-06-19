@@ -20,13 +20,18 @@ public:
 	friend Vector2D& operator*(Vector2D& v1, Vector2D& v2);
 	friend Vector2D& operator/(Vector2D& v1, Vector2D& v2);
 	friend Vector2D& operator*(Vector2D& v1, float f);
+	friend Vector2D& operator*(Vector2D& v1, int i);
+
 
 	Vector2D& operator+=(const Vector2D& vec);
 	Vector2D& operator-=(const Vector2D& vec);
 	Vector2D& operator*=(const Vector2D& vec);
 	Vector2D& operator*=(const float f);
 	Vector2D& operator*=(const double f);
+	Vector2D& operator*=(const int i);
 	Vector2D& operator/=(const Vector2D& vec);
+	Vector2D& operator*(const int i);
+	void Zero();
 
 	friend std::ostream& operator<<(std::ostream& stream, const Vector2D& vec);
 };
