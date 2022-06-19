@@ -31,10 +31,12 @@ enum groupLabels : std::size_t
 Game::Game() 
 {
 }
+
 Game::~Game()
 {
 
 }
+
 void Game::Init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
@@ -42,7 +44,6 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	// some required setting values
 	drawScale = 2.0f;
 	tileSize = 32;
-
 
 	if (fullscreen)
 	{
@@ -77,7 +78,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	Map::LoadMap("assets/Map_12x10.map",20,12);
 
 	player.addComponent<TransformComponent>(120,100,32,32,1);
-	player.addComponent<SpriteComponent>("assets/wizard_idle.png",4,1000/4);
+	player.addComponent<SpriteComponent>("assets/wizard_animationSet.png",true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
@@ -85,7 +86,6 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 }
 void Game::HandleEvents()
 {
-
 	SDL_PollEvent(&event);
 	
 	switch (event.type) {
@@ -144,6 +144,7 @@ void Game::Render()
 
 	SDL_RenderPresent(renderer);
 }
+
 void Game::Clean()
 {
 	SDL_DestroyWindow(window);

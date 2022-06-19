@@ -98,6 +98,9 @@
     <ClInclude Include="Managers\Map.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="ECS\Animation.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />
