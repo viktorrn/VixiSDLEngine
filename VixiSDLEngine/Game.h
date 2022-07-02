@@ -1,7 +1,9 @@
 #pragma once
 #include "libDependecies.h";
+#include "AssetManager.h"
 
 class ColliderComponent;
+class AssetManager;
 
 class Game
 {
@@ -17,7 +19,7 @@ public:
 	void Clean();
 
 	bool Running() { return isRunning; };
-	static void AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const char* path, int scale);
+	static void AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const std::string ID, int scale);
 
 	static float drawScale;
 	static float delta;
@@ -26,8 +28,17 @@ public:
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static std::vector<ColliderComponent*> colliders;
+	
 	static bool isRunning;
-	//static SDL_Rect* camera;
+	static AssetManager* assets;
+
+	enum groupLabels : std::size_t
+	{
+		groupMap,
+		groupPlayers,
+		groupEnemies,
+		groupColliders,
+	};
 
 private:
 

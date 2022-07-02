@@ -1,6 +1,7 @@
 #pragma once
 #include "libDependecies.h"
 
+
 class TileMap
 {
 public:
@@ -12,7 +13,7 @@ public:
 	TileMap(int mWidth, int mHeight, int scale);
 	~TileMap();
 
-	void LoadTileMap(std::string path, int sizeX, int sizeY, const char* map_ss);
+	void LoadTileMap(std::string path, int sizeX, int sizeY, const const std::string ID);
 
 private:
 

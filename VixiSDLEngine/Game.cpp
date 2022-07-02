@@ -7,30 +7,22 @@
 
 
 
+
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
+AssetManager* Game::assets = new AssetManager(&manager);
+
 
 float Game::drawScale;
 float Game::delta;
 Uint8 Game::tileSize;
 bool Game::isRunning = false;
-//SDL_Rect* Game::camera;
 TileMap* map;
-
-
 SDL_Event Game::event;
 std::vector<ColliderComponent*> Game::colliders;
 
 auto& camera(manager.addEntity());
 auto& player(manager.addEntity());
-
-enum groupLabels : std::size_t
-{
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColliders,
-};
 
 Game::Game() 
 {
@@ -46,7 +38,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	int flags = 0;
 	
 	// some required setting values
-	drawScale = 1.0f;
+	drawScale = 2.0f;
 	tileSize = 32;
 
 	camera.addComponent<CameraComponent>();
@@ -87,10 +79,14 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 		std::cout << "game failed to initialized, error!!!" << std::endl;
 	}
 
-	map->LoadTileMap("assets/map.map",25,20,"assets/terrain_ss.png");
+
+	assets->AddTexture("terrain", "assets/terrain_ss.png");
+	assets->AddTexture("player", "assets/wizard_animationSet.png");
+
+	map->LoadTileMap("assets/map.map",25,20,"terrain");
 
 	player.addComponent<TransformComponent>(120,100,32,32,1);
-	player.addComponent<SpriteComponent>("assets/wizard_animationSet.png",true);
+	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
@@ -140,8 +136,8 @@ void Game::Update()
 	
 }
 
-auto& gTiles(manager.getGroup(groupMap));
-auto& gPlayers = manager.getGroup(groupPlayers);
+auto& gTiles(manager.getGroup(Game::groupMap));
+auto& gPlayers = manager.getGroup(Game::groupPlayers);
 
 
 void Game::Render()
@@ -168,10 +164,10 @@ void Game::Clean()
 	std::cout << "Game cleaned" << std::endl;
 }
 
-void Game::AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const char* path, int scale)
+void Game::AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const std::string ID, int scale)
 {
 	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, path, scale);
+	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, ID, scale);
 	tile.getComponent<TileComponent>().AddCamera(&camera.getComponent<CameraComponent>());
 	tile.addGroup(groupMap);
 	

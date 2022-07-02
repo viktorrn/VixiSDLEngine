@@ -5,6 +5,7 @@
 
 
 
+
 TileMap::TileMap(int mWidth, int mHeight, int scale)
 {
 	this->scale = scale;
@@ -17,7 +18,7 @@ TileMap::~TileMap()
 
 }
 
-void TileMap::LoadTileMap(std::string path, int sizeX, int sizeY, const char* map_ss)
+void TileMap::LoadTileMap(std::string path, int sizeX, int sizeY, const std::string ID)
 {
 	char c;
 	std::fstream mapFile;
@@ -32,7 +33,7 @@ void TileMap::LoadTileMap(std::string path, int sizeX, int sizeY, const char* ma
 			srcY = atoi(&c) * Game::tileSize;
 			mapFile.get(c);
 			srcX = atoi(&c) * Game::tileSize;
-			Game::AddTileToTileMap(srcX, srcY, x * Game::tileSize * scale, y * Game::tileSize * scale, map_ss, scale);
+			Game::AddTileToTileMap(srcX, srcY, x * Game::tileSize * scale, y * Game::tileSize * scale, ID, scale);
 			mapFile.ignore();
 		}
 	}

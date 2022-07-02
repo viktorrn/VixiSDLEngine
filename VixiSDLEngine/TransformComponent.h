@@ -12,7 +12,7 @@ public:
 	int width = Game::tileSize;
 	int scale = 1;
 
-	float speed = 256.0f;
+	float speed = 64.0f;
 
 	TransformComponent()
 	{

@@ -5,13 +5,14 @@
 #include "SDL.h"
 #include "Animation.h"
 #include <map>
+#include <string>
 
 class SpriteComponent : public Component
 {
 private:
 	TransformComponent* transform;
 	CameraComponent* camera;
-	SDL_Texture* texture;
+	std::string textureID;
 	SDL_Rect srcRect, destRect;
 
 	int width, height;
@@ -35,7 +36,7 @@ public:
 		SetTexture(path);
 	}
 
-	SpriteComponent(const char* path, bool isAnimated)
+	SpriteComponent(std::string ID, bool isAnimated)
 	{
 		animated = isAnimated;
 
@@ -49,17 +50,17 @@ public:
 
 		Play("Idle");
 		
-		SetTexture(path);
+		SetTexture(ID);
 	}
 	
 	~SpriteComponent()
 	{
-		SDL_DestroyTexture(texture);
+		//SDL_DestroyTexture(texture);
 	}
 
-	void SetTexture(const char* path)
+	void SetTexture(const std::string ID )
 	{
-		texture = TextureManager::LoadTexture(path);
+		textureID = ID;
 	}
 
 	void Init() override
@@ -106,7 +107,7 @@ public:
 	void Draw() override
 	{
 		if(camera!= nullptr)
-		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+		TextureManager::Draw(Game::assets->GetTexture(textureID), srcRect, destRect, spriteFlip);
 	}
 
 	void Play(const char* animName)

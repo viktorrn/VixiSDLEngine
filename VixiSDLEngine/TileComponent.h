@@ -1,12 +1,13 @@
 #pragma once
 #include "ECS.h"
 #include "SDL.h"
+#include <string>
 
 class TileComponent : public Component
 {
 public:
 	CameraComponent* camera;
-	SDL_Texture* texture;
+	std::string textureID;
 	SDL_Rect srcRect, destRect;
 	Vector2D positon;
 
@@ -14,12 +15,12 @@ public:
 
 	~TileComponent()
 	{
-		SDL_DestroyTexture(texture);
+		//SDL_DestroyTexture(texture);
 	}
 
-	TileComponent(int srcX, int srcY, int xpos, int ypos, const char* path, int scale)
+	TileComponent(int srcX, int srcY, int xpos, int ypos, const std::string id, int scale)
 	{
-		texture = TextureManager::LoadTexture(path);
+		textureID = id;
 
 		positon.x = xpos;
 		positon.y = ypos;
@@ -56,7 +57,7 @@ public:
 	void Draw() override
 	{
 		if (camera != nullptr)
-		TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE);
+		TextureManager::Draw(Game::assets->GetTexture(textureID), srcRect, destRect, SDL_FLIP_NONE);
 	}
 
 };
