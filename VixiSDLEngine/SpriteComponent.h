@@ -1,7 +1,7 @@
 #pragma once
 #include "Components.h"
-#include "../Game.h"
-#include "../Managers/TextureManager.h"
+#include "Game.h"
+#include "TextureManager.h"
 #include "SDL.h"
 #include "Animation.h"
 #include <map>
@@ -10,8 +10,10 @@ class SpriteComponent : public Component
 {
 private:
 	TransformComponent* transform;
+	CameraComponent* camera;
 	SDL_Texture* texture;
 	SDL_Rect srcRect, destRect;
+
 	int width, height;
 
 	bool animated = false;
@@ -68,6 +70,11 @@ public:
 		srcRect.h = transform->height * transform->scale;
 	}
 
+	void AddCamera(CameraComponent* cam) 
+	{
+		camera = cam;
+	}
+
 	void Update() override
 	{
 		tick += static_cast<int>(Game::delta * 1000.0f);
@@ -81,23 +88,35 @@ public:
 		
 		srcRect.y = animationIndex*srcRect.h;
 
-		destRect.x = static_cast<int>(transform->position.x+0.5f) * Game::drawScale;
-		destRect.y = static_cast<int>(transform->position.y+0.5f) * Game::drawScale;
+		int cx, cy; 
+		cx = cy= 0;
+
+		if (camera != nullptr)
+		{
+			cx = camera->position.x;
+			cy = camera->position.y;
+		}
+
+		destRect.x = (static_cast<int>(transform->position.x + 0.5f) - cx);
+		destRect.y = (static_cast<int>(transform->position.y+0.5f) - cy);
 		destRect.w = transform->width * transform->scale * Game::drawScale;
 		destRect.h = transform->height * transform->scale * Game::drawScale;
 	}
 
 	void Draw() override
 	{
+		if(camera!= nullptr)
 		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
 	}
 
 	void Play(const char* animName)
 	{
 		currentAnimation = animName;
+		
 		frames = animations[animName].frames;
 		animationIndex = animations[animName].index;
 		speed = animations[animName].speed;
+
 		if(currentAnimation != animName)
 			tick = 0;
 

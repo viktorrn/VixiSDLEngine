@@ -134,31 +134,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DataStructs\Vector2D.cpp" />
-    <ClCompile Include="ECS\ECS.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Managers\Collision.cpp" />
-    <ClCompile Include="Managers\Map.cpp" />
-    <ClCompile Include="Managers\TextureManager.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataStructs\Vector2D.h" />
-    <ClInclude Include="ECS\Animation.h" />
-    <ClInclude Include="ECS\ColliderComponent.h" />
-    <ClInclude Include="ECS\Components.h" />
-    <ClInclude Include="ECS\ECS.h" />
-    <ClInclude Include="ECS\KeyboardController.h" />
-    <ClInclude Include="ECS\TileComponent.h" />
-    <ClInclude Include="ECS\TransformComponent.h" />
-    <ClInclude Include="ECS\SpriteComponent.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="ColliderComponent.h" />
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="libDependecies.h" />
-    <ClInclude Include="Managers\Collision.h" />
-    <ClInclude Include="Managers\Map.h" />
-    <ClInclude Include="Managers\TextureManager.h" />
+    <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="TileComponent.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />

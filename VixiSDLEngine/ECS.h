@@ -1,5 +1,5 @@
 #pragma once
-#include "../libDependecies.h"
+#include "libDependecies.h"
 
 class Component;
 class Entity;

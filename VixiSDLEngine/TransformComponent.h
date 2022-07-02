@@ -1,6 +1,6 @@
 #pragma once
 #include "Components.h";
-#include "../DataStructs/Vector2D.h"
+#include "Vector2D.h"
 
 class TransformComponent : public Component
 {
@@ -12,7 +12,7 @@ public:
 	int width = Game::tileSize;
 	int scale = 1;
 
-	float speed = 64.0f;
+	float speed = 256.0f;
 
 	TransformComponent()
 	{
@@ -39,7 +39,7 @@ public:
 
 	void Update() override
 	{
-		position.x += velocity.x * speed * Game::delta * static_cast<float>(scale);
-		position.y += velocity.y * speed * Game::delta * static_cast<float>(scale);
+		position.x += velocity.x * speed * Game::delta * static_cast<float>(scale) * Game::drawScale;
+		position.y += velocity.y * speed * Game::delta * static_cast<float>(scale) * Game::drawScale;
 	}
 };

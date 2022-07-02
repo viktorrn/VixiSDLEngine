@@ -1,23 +1,27 @@
 #include "Game.h"
-#include "Managers/TextureManager.h"
-#include "Managers/Map.h"
-#include "DataStructs/Vector2D.h"
-#include "ECS/Components.h"
-#include "Managers/Collision.h"
+#include "TextureManager.h"
+#include "TileMap.h"
+#include "Vector2D.h"
+#include "Components.h"
+#include "Collision.h"
+
 
 
 SDL_Renderer* Game::renderer = nullptr;
-
-float Game::drawScale = 1.0f;
-float Game::delta = 1.0f;
-Uint8 Game::tileSize = 1;
-
-
 Manager manager;
-SDL_Event Game::event;
 
+float Game::drawScale;
+float Game::delta;
+Uint8 Game::tileSize;
+bool Game::isRunning = false;
+//SDL_Rect* Game::camera;
+TileMap* map;
+
+
+SDL_Event Game::event;
 std::vector<ColliderComponent*> Game::colliders;
-auto& wall(manager.addEntity());
+
+auto& camera(manager.addEntity());
 auto& player(manager.addEntity());
 
 enum groupLabels : std::size_t
@@ -42,8 +46,16 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	int flags = 0;
 	
 	// some required setting values
-	drawScale = 2.0f;
+	drawScale = 1.0f;
 	tileSize = 32;
+
+	camera.addComponent<CameraComponent>();
+	camera.getComponent<CameraComponent>().UpdateScreenSize(width * tileSize, height * tileSize);
+
+	map = new TileMap(25, 20, 1); 
+	camera.getComponent<CameraComponent>().AdjustToMap(map->width * tileSize, map->height * tileSize);
+
+	
 
 	if (fullscreen)
 	{
@@ -75,13 +87,15 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 		std::cout << "game failed to initialized, error!!!" << std::endl;
 	}
 
-	Map::LoadMap("assets/Map_12x10.map",20,12);
+	map->LoadTileMap("assets/map.map",25,20,"assets/terrain_ss.png");
 
 	player.addComponent<TransformComponent>(120,100,32,32,1);
 	player.addComponent<SpriteComponent>("assets/wizard_animationSet.png",true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
+	player.getComponent<SpriteComponent>().AddCamera(&camera.getComponent<CameraComponent>());
+	camera.getComponent<CameraComponent>().setTarget(&player);
 
 }
 void Game::HandleEvents()
@@ -114,6 +128,7 @@ void Game::Update()
 	// update
 	manager.Refresh();
 	manager.Update();
+	//camera->Update();
 
 	for (auto cc : colliders)
 	{
@@ -153,9 +168,11 @@ void Game::Clean()
 	std::cout << "Game cleaned" << std::endl;
 }
 
-void Game::AddTile(int id, int x, int y)
+void Game::AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const char* path, int scale)
 {
 	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x, y, Game::tileSize, Game::tileSize, id);
+	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, path, scale);
+	tile.getComponent<TileComponent>().AddCamera(&camera.getComponent<CameraComponent>());
 	tile.addGroup(groupMap);
+	
 }

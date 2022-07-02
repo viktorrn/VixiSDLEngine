@@ -1,5 +1,5 @@
 #pragma once
-#include "../Game.h"
+#include "Game.h"
 #include "ECS.h"
 #include "Components.h"
 
@@ -64,6 +64,9 @@ public:
 				sprite->spriteFlip = SDL_FLIP_NONE;
 				break;
 
+			case SDLK_ESCAPE:
+				Game::isRunning = false;
+				break;
 			default:
 				break;
 			}
