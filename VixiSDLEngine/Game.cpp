@@ -82,7 +82,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 
 	assets->AddTexture("terrain", "assets/terrain_ss.png");
 	assets->AddTexture("player", "assets/wizard_animationSet.png");
-
+	// added something
 	map->LoadTileMap("assets/map.map",25,20,"terrain");
 
 	player.addComponent<TransformComponent>(120,100,32,32,1);
