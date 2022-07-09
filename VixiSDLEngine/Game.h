@@ -1,9 +1,11 @@
 #pragma once
 #include "libDependecies.h";
 #include "AssetManager.h"
+#include "InputManager.h"
 
 class ColliderComponent;
 class AssetManager;
+class InputManager;
 
 class Game
 {
@@ -17,8 +19,11 @@ public:
 	void Update();
 	void Render();
 	void Clean();
+	static size_t GetRandom(size_t max);
 
 	bool Running() { return isRunning; };
+
+	// tile maps
 	static void AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const std::string ID, int scale);
 
 	static float drawScale;
@@ -31,6 +36,7 @@ public:
 	
 	static bool isRunning;
 	static AssetManager* assets;
+	static InputManager* inputs;
 
 	enum groupLabels : std::size_t
 	{

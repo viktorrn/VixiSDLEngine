@@ -28,6 +28,12 @@
     <Filter Include="Source Files\DataStructs">
       <UniqueIdentifier>{e4388272-6a9f-4805-8f95-bbfb0a878de9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{a4390d4e-1dad-4475-897f-f5b30688504b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{114a689c-eb13-48d5-8bd3-0089b0d6db83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -53,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CellTileMap.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +116,15 @@
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="CellTileMap.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />
@@ -122,6 +146,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\wizard_32x32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\tiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\tiles_ss.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

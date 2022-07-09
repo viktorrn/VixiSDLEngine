@@ -6,14 +6,14 @@ class TileMap
 {
 public:
 
-	int width;
-	int height;
+	int drawWidth;
+	int drawHeight;
 	int scale;
 
 	TileMap(int mWidth, int mHeight, int scale);
 	~TileMap();
 
-	void LoadTileMap(std::string path, int sizeX, int sizeY, const const std::string ID);
+	void LoadTileMap(std::string path, int sizeX, int sizeY, const std::string ID);
 
 private:
 

@@ -7,6 +7,8 @@
 #include <memory>
 #include <algorithm>
 #include <bitset>
+#include <random>
+#include <ctime>
 
 #include "SDL.h"
 #include "SDL_image.h"

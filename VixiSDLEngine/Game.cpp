@@ -2,16 +2,16 @@
 #include "TextureManager.h"
 #include "TileMap.h"
 #include "Vector2D.h"
+#include <vector>
 #include "Components.h"
 #include "Collision.h"
-
-
+#include "CellTileMap.h"
 
 
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
 AssetManager* Game::assets = new AssetManager(&manager);
-
+InputManager* Game::inputs = new InputManager();
 
 float Game::drawScale;
 float Game::delta;
@@ -19,10 +19,13 @@ Uint8 Game::tileSize;
 bool Game::isRunning = false;
 TileMap* map;
 SDL_Event Game::event;
+CellTileMap* cells;
+
 std::vector<ColliderComponent*> Game::colliders;
 
-auto& camera(manager.addEntity());
-auto& player(manager.addEntity());
+
+auto& camera(manager.addEntity());;
+
 
 Game::Game() 
 {
@@ -36,18 +39,10 @@ Game::~Game()
 void Game::Init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
-	
+	srand((int)time(0));
 	// some required setting values
-	drawScale = 2.0f;
-	tileSize = 32;
-
-	camera.addComponent<CameraComponent>();
-	camera.getComponent<CameraComponent>().UpdateScreenSize(width * tileSize, height * tileSize);
-
-	map = new TileMap(25, 20, 1); 
-	camera.getComponent<CameraComponent>().AdjustToMap(map->width * tileSize, map->height * tileSize);
-
-	
+	drawScale = 1.0f;
+	tileSize = 16;
 
 	if (fullscreen)
 	{
@@ -57,7 +52,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
 		std::cout << "Subsystem init" << std::endl;
-		window = SDL_CreateWindow(title, xpos, ypos, width*tileSize, height * tileSize, flags);
+		window = SDL_CreateWindow(title, xpos, ypos, width*tileSize* drawScale, height * tileSize* drawScale, flags);
 		
 		if (window) 
 		{
@@ -67,7 +62,7 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			std::cout << "Renderer initialized" << std::endl;
 		}
 
@@ -79,19 +74,18 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 		std::cout << "game failed to initialized, error!!!" << std::endl;
 	}
 
+	if (!isRunning) return;
 
-	assets->AddTexture("terrain", "assets/terrain_ss.png");
-	assets->AddTexture("player", "assets/wizard_animationSet.png");
-	// added something
-	map->LoadTileMap("assets/map.map",25,20,"terrain");
+	// init data
 
-	player.addComponent<TransformComponent>(120,100,32,32,1);
-	player.addComponent<SpriteComponent>("player", true);
-	player.addComponent<KeyboardController>();
-	player.addComponent<ColliderComponent>("player");
-	player.addGroup(groupPlayers);
-	player.getComponent<SpriteComponent>().AddCamera(&camera.getComponent<CameraComponent>());
-	camera.getComponent<CameraComponent>().setTarget(&player);
+	inputs->Init();
+
+	cells = new CellTileMap();
+	assets->AddTexture("tile", "assets/tiles_ss.png");
+
+	cells->AdjustCellMap(width, height);
+	cells->GenerateCellMap();
+	//cells->LoadCellMap("assets/Map_32x32.map", 32, 32);
 
 }
 void Game::HandleEvents()
@@ -109,30 +103,30 @@ void Game::HandleEvents()
 }
 void Game::Update()
 {
-
+	
 	Uint32 now = SDL_GetTicks();
 	Game::delta = (now - lastUpdateEnd) / 1000.0f;
 	lastUpdateEnd = now;
 
-	/*float dt = 1.0f / 60.0f;
+	float dt = 1.0f / 60.0f;
+
+	/*
 	if (delta > dt)
-	{
-		delta = dt;
-	}
+		{	
+			delta = dt;
+		}
+
 	*/
 
 	// update
+
+	inputs->Update();
+	cells->Update();
+
 	manager.Refresh();
 	manager.Update();
-	//camera->Update();
 
-	for (auto cc : colliders)
-	{
-		if (Collisons::AABB(player.getComponent<ColliderComponent>(), *cc) && cc->tag != "player")
-		{
-			player.getComponent<TransformComponent>().velocity *= -1;
-		}
-	}
+	//camera->Update();
 	
 }
 
@@ -143,6 +137,9 @@ auto& gPlayers = manager.getGroup(Game::groupPlayers);
 void Game::Render()
 {
 	SDL_RenderClear(renderer);
+
+	cells->Draw();
+
 	for (auto& t : gTiles)
 	{
 		t->Draw();
@@ -152,7 +149,7 @@ void Game::Render()
 	{
 		p->Draw();
 	}
-
+	
 	SDL_RenderPresent(renderer);
 }
 
@@ -171,4 +168,9 @@ void Game::AddTileToTileMap(int srcX, int srcY, int xpos, int ypos, const std::s
 	tile.getComponent<TileComponent>().AddCamera(&camera.getComponent<CameraComponent>());
 	tile.addGroup(groupMap);
 	
+}
+
+size_t Game::GetRandom(size_t max)
+{
+	return rand() % (max + 1);
 }

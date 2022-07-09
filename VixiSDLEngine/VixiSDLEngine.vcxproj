@@ -135,9 +135,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="CellTileMap.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ECS.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -147,10 +150,13 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="CameraComponent.h" />
+    <ClInclude Include="CellTileMap.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="ECS.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="libDependecies.h" />
     <ClInclude Include="SpriteComponent.h" />
@@ -170,6 +176,8 @@
     <Image Include="assets\dirt.png" />
     <Image Include="assets\draziw_32x32.png" />
     <Image Include="assets\grass.png" />
+    <Image Include="assets\tiles.png" />
+    <Image Include="assets\tiles_ss.png" />
     <Image Include="assets\water.png" />
     <Image Include="assets\wizard_32x32.png" />
   </ItemGroup>

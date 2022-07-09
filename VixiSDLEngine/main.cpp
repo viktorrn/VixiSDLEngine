@@ -4,19 +4,38 @@
 using namespace std;
 
 Game *game = nullptr;
+//enum class CellProperties
+//{
+//	NONE = 0b00000000,
+//	MOVE_DOWN = 0b00000001,
+//	MOVE_DOWN_SIDE = 0b00000010,
+//	MOVE_SIDE = 0b00000100,
+//};
+//
+//inline int operator | (CellProperties a, CellProperties b)
+//{
+//	return (static_cast<int>(a) | static_cast<int>(b));
+//};
+
+
 
 int main(int argc, char *argv[])
 {
 	game = new Game();
-	const int FPS = 250;
+	const int FPS = 60;//24;
 	const int frameDelay = 1000 / FPS;
 
 	Uint32 frameStart;
 	int frameTime;
 
-	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 25, 20, false);
 
-	while(game->Running())
+
+
+	//cout << static_cast<bool>(3 & 1) << std::endl;
+
+	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 128, 64, false);
+
+	while (game->Running())
 	{
 		frameStart = SDL_GetTicks();
 		//cout << frameStart << endl;
