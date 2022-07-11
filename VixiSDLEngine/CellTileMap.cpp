@@ -8,54 +8,7 @@
 #include "Game.h"
 #include <deque>
 
-
-
 using namespace std;
-
-enum class CellProperties
-{
-	NONE			= 0b00000000,
-	MOVE_DOWN		= 0b00000001,
-	MOVE_DOWN_SIDE	= 0b00000010,
-	MOVE_SIDE		= 0b00000100,
-};
-
-
-enum class CellType
-{
-	EMPTY	= 0b00000000,
-	ROCK	= 0b00000001,
-	SAND	= 0b00000010,
-	WATER	= 0b00000011
-};
-
-struct Cell
-{
-	CellType		Type = CellType::EMPTY;
-	int				Props = static_cast<int>(CellProperties::NONE);
-	bool			Active = false;
-	int				FramesSinceMoving = 0;
-	int				DispersityRate = 1;
-	int				Density = 12;
-	
-	//deque<int>		Visited;
-	
-	Cell() {};
-	Cell(CellType t, Uint8 p,int disp, int dens)
-	{
-		Type = t;
-		Props = p;
-		Active = true;
-		DispersityRate = disp;
-		Density = dens;
-	}
-};
-
-
-void CellTileMap::LoadCellTypes() {
-
-}
-
 
 void CellTileMap::AddCell(size_t i, size_t id)
 {
@@ -67,41 +20,46 @@ Cell* CellTileMap::CreateCell(size_t id)
 	Cell* ptr;
 	switch (id)
 	{
+
 	case 1:
-
-
 		ptr = new Cell(
 			CellType::ROCK,
 			static_cast<int>(CellProperties::NONE),
 			0,
 			100
 		);
-
 		break;
+
 	case 2:
 		ptr = new Cell(
 			CellType::SAND,
 			static_cast<int>(CellProperties::MOVE_DOWN) + static_cast<Uint8>(CellProperties::MOVE_DOWN_SIDE) + static_cast<Uint8>(CellProperties::MOVE_SIDE),
-			2,
+			1,
 			20
 		);
+		break;
 
-			break;
 	case 3:
-
-
 		ptr = new Cell(
 			CellType::WATER,
 			static_cast<int>(CellProperties::MOVE_DOWN)  + static_cast<Uint8>(CellProperties::MOVE_SIDE) + static_cast<Uint8>(CellProperties::MOVE_DOWN_SIDE),
-			7,
+			4,
+			15
+		);
+	case 3:
+		ptr = new Cell(
+			CellType::GRASS,
+			static_cast<int>(CellProperties::NONE),
+			4,
 			15
 		);
 		break;
-	case 0:
+
 	default:
 		ptr = new Cell();
 		break;
 	}
+
 	return ptr;
 }
 void CellTileMap::SetCell(size_t i, size_t id)
@@ -147,35 +105,33 @@ const Cell* CellTileMap::GetCell(size_t index) {	return Matrix[index];	}
 size_t CellTileMap::calcIndex(size_t x, size_t y) { return y * width + x; }
 
 bool CellTileMap::InBounds(size_t x, size_t y) { return x < width && y < height  && x >= 0 && y >= 0;  };
+bool CellTileMap::InBounds(size_t i) { return i >= 0 && i < width* height; };
 bool CellTileMap::IsEmpty(size_t x, size_t y) { return CellTileMap::InBounds(x, y) && CellTileMap::GetCell(x, y)->Type == CellType::EMPTY; };
-bool CellTileMap::CompareDensityAndBounds(size_t x, size_t y, const Cell* cell)
+bool CellTileMap::CompareDensityAndBounds(const Cell* cell,size_t xTaget, size_t yTarget)
 {
-	return CellTileMap::InBounds(x, y) && CompareDensity(calcIndex(x, y), cell);
+	return CellTileMap::InBounds(xTaget, yTarget) && HasGreaterDensity(cell, GetCell(calcIndex(xTaget,yTarget)));
 }
-bool CellTileMap::CompareDensity(size_t i,  const Cell* cell) {
-	return GetCell(i)->Density < cell->Density;
+bool CellTileMap::HasGreaterDensity(const Cell* cell1,  const Cell* cell2) {
+	return cell1->Density > cell2->Density;
 }
 
 void CellTileMap::MoveCell(size_t x, size_t y, size_t xto, size_t yto)
 {
-	cellMoves.emplace_back(calcIndex(xto, yto), calcIndex(x, y));
+	cellMoves.emplace_back(calcIndex(x, y), calcIndex(xto, yto));
 }
 
 bool CellTileMap::MoveDown(size_t x, size_t y, const Cell* cell)
 {
-	//bool down = IsEmpty(x, y + 1) || CompareDensityAndBounds(x, y + 1, cell);
-	bool down = CompareDensityAndBounds(x, y + 1, cell);
-	//cout << 
+	bool down = CompareDensityAndBounds(cell, x, y + 1);
 	if (down) MoveCell(x, y, x, y + 1);
 	return down;
 }
 
 bool CellTileMap::MoveDownAndSide(size_t x, size_t y, const Cell* cell)
 {
-	//bool downLeft = IsEmpty(x - 1, y + 1) || CompareDensityAndBounds(x -1, y + 1, cell);
-	//bool downRight = IsEmpty(x + 1, y + 1) || CompareDensityAndBounds(x + 1, y + 1, cell);
-	bool downLeft =  CompareDensityAndBounds(x - 1, y + 1, cell);
-	bool downRight = CompareDensityAndBounds(x + 1, y + 1, cell);
+
+	bool downLeft =  CompareDensityAndBounds(cell, x - 1, y + 1);
+	bool downRight = CompareDensityAndBounds(cell, x + 1, y + 1);
 	if (downLeft && downRight)
 	{
 		downLeft = Game::GetRandom(2);
@@ -194,15 +150,30 @@ bool VisitedRecently(int p, deque<int> visited)
 	return false;
 }
 
+bool CellTileMap::EnvokedMovment(const Cell* envoker, int& envI, const Cell* cell, int& cellI)
+{
+	int x = cellI % width;
+	int y = cellI / height;
+	int ld = findIfEmptyToSide(x, y, -1, 1);
+	int rd = findIfEmptyToSide(x, y, 1, 1);
+	bool left = (ld == 0) ? false : true;
+	bool right = (rd == 0) ? false : true;
+
+	if (left && right)
+	{
+		int r = Game::GetRandom(1);
+		left = r;
+		right = !left;
+	}
+	return false;
+}
 
 int CellTileMap::findIfEmptyToSide(size_t x, size_t y,size_t dir, int dispersity)
 {
 	int i = 1;
 	while (i <= dispersity)
 	{
-		if(IsEmpty(x + i * dir, y)) return i * dir; 
-		if (!IsEmpty(x + i*dir, y)) return (i - 1) * dir;
-			//if(CompareDensity(getCell))
+		if (!IsEmpty(x + i*dir, y)) return (i - 1) * dir;	
 		i++;
 
 	}
@@ -213,8 +184,6 @@ bool CellTileMap::MoveSide(size_t x, size_t y, const Cell* cell)
 {
 	int ld = findIfEmptyToSide(x, y,  -1, cell->DispersityRate);
 	int rd = findIfEmptyToSide(x, y, 1, cell->DispersityRate);
-	//if(ld > 0 || rd > 0)
-	//cout << " ld " << ld << " rd " << rd << endl;
 	bool left = (ld == 0) ? false : true;
 	bool right = (rd == 0) ? false : true;
 	
@@ -261,8 +230,8 @@ void CellTileMap::Update()
 
 			}
 		}*/
-		for (int i(0u); i < 1; i++)
-			for (int ii(0u); ii < 1; ii++)
+		for (int i(0u); i < 7; i++)
+			for (int ii(0u); ii < 7; ii++)
 				if (InBounds(x+ii, y+i))
 				{
 					cout << " placed tile " << currentTileSelected << " at " << x << "," << y << endl;
@@ -289,21 +258,20 @@ void CellTileMap::Update()
 void CellTileMap::CommitMoves()
 {
 	if (cellMoves.size() <= 0) return;
-	for (size_t i(0u); i < cellMoves.size(); i++)
+	for (size_t i = cellMoves.size()-1; i > 0 ; i--)
 	{//Matrix[cellMoves[i].first]->Type != CellType::EMPTY && 
-		if (!CompareDensity(cellMoves[i].first, GetCell(cellMoves[i].second) ) )
+		if (!InBounds(cellMoves[i].end) || !HasGreaterDensity(GetCell(cellMoves[i].start), GetCell(cellMoves[i].end)) )
 		{
-			cellMoves[i] = cellMoves.back(); cellMoves.pop_back();
-			i--;
+			cellMoves.pop_back();
+			//i--;
 		}
 	}
 
 
-
 	sort(cellMoves.begin(), cellMoves.end(),
-		[](auto& a, auto& b) {return a.first > b.first;  }
+		[](auto& a, auto& b) {return a.end > b.end;  }
 	);
-	
+
 
 	Cell* temp;
 	size_t iprev = 0;
@@ -315,24 +283,17 @@ void CellTileMap::CommitMoves()
 	{
 		amount = 0;
 		if(i-1 > amount-1)
-		while (cellMoves[i-1].first == cellMoves[i - 2 - amount].first) amount++;
+		while (cellMoves[i-1].end == cellMoves[i - 2 - amount].end) amount++;
 
 
 		rand = Game::GetRandom(amount);
-		rand == 0;
 
-		dst = cellMoves[i-1 + rand].first;
-		src = cellMoves[i-1 + rand].second;
-		
+		src = cellMoves[i - 1 + rand].start;
+		dst = cellMoves[i-1 + rand].end;
+
 		temp = Matrix[dst];
 
 		
-		/*//Matrix[src]->Visited.emplace_front(src);
-		//Matrix[src]->Visited.emplace_front(dst);
-		//if (Matrix[src]->Visited.size() > 5)
-		if (Matrix[src]->Visited.size() > 0)
-			Matrix[src]->Visited.pop_back();
-			*/
 		Matrix[dst] = Matrix[src];
 		Matrix[src] = temp;
 
@@ -345,8 +306,6 @@ void CellTileMap::CommitMoves()
 	cellMoves.clear();
 
 }
-
-
 
 void CellTileMap::Draw()
 {
@@ -363,6 +322,7 @@ void CellTileMap::Draw()
 			i = y * width + x;
 			id = static_cast<int>(Matrix[i]->Type);
 			src.x = Game::tileSize * id;
+			src.y = Matrix[i]->Variant * Game::tileSize;
 			dest.x = x * Game::tileSize * Game::drawScale;
 			dest.y = y * Game::tileSize * Game::drawScale;
 			TextureManager::Draw(Game::assets->GetTexture("tile"), src, dest, SDL_FLIP_NONE);

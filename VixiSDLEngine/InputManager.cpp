@@ -32,16 +32,16 @@ void InputManager::Update()
 		switch (Game::event.key.keysym.sym)
 		{
 		case SDLK_0:
-			inputMap["0"] = false;
+			
 			break;
 		case SDLK_1:
-			inputMap["1"] = false;
+			
 			break;
 		case SDLK_2:
-			inputMap["2"] = false;
+		
 			break;
 		case SDLK_3:
-			inputMap["3"] = false;
+			
 			break;
 		}
 	}
@@ -51,31 +51,22 @@ void InputManager::Update()
 		switch (Game::event.key.keysym.sym)
 		{
 		case SDLK_0:
-			inputMap["0"] = true;
-			inputMap["1"] = false;
-			inputMap["2"] = false;
-			inputMap["3"] = false;
+			inputInt = 0;
 			break;
 
 		case SDLK_1:
-			inputMap["0"] = false;
-			inputMap["1"] = true;
-			inputMap["2"] = false;
-			inputMap["3"] = false;
+			inputInt = 1;
 			break;
 
 		case SDLK_2:
-			inputMap["0"] = false;
-			inputMap["1"] = false;
-			inputMap["2"] = true;
-			inputMap["3"] = false;
+			inputInt = 2;
 			break;
 
 		case SDLK_3:
-			inputMap["0"] = false;
-			inputMap["1"] = false;
-			inputMap["2"] = false;
-			inputMap["3"] = true;
+			inputInt = 3;
+			break;
+		case SDLK_4:
+			inputInt = 4;
 			break;
 		}
 	}

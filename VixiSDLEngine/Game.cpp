@@ -41,8 +41,8 @@ void Game::Init(const char * title, int xpos, int ypos, int width, int height, b
 	int flags = 0;
 	srand((int)time(0));
 	// some required setting values
-	drawScale = 1.0f;
-	tileSize = 16;
+	drawScale = 2.0f;
+	tileSize = 4;
 
 	if (fullscreen)
 	{

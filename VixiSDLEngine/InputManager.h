@@ -35,5 +35,6 @@ private:
 	Vector2D* prevMousePos;
 	Vector2D* mousePos;
 	std::map<std::string, bool> inputMap;
+	int inputInt;
 };
 
