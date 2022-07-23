@@ -22,7 +22,7 @@ Game *game = nullptr;
 int main(int argc, char *argv[])
 {
 	game = new Game();
-	const int FPS = 60;//24;
+	const int FPS = 30;//24;
 	const int frameDelay = 1000 / FPS;
 
 	Uint32 frameStart;
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
 	//cout << static_cast<bool>(3 & 1) << std::endl;
 
-	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 128, 64, false);
+	game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 2, 2*2, false);
 
 	while (game->Running())
 	{

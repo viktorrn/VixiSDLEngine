@@ -68,6 +68,10 @@ void InputManager::Update()
 		case SDLK_4:
 			inputInt = 4;
 			break;
+		case SDLK_5:
+
+			inputInt = 5;
+			break;
 		}
 	}
 }

@@ -30,6 +30,10 @@ public:
 	{
 		return inputMap[str];
 	}
+	int GetInputInt()
+	{
+		return inputInt;
+	}
 	
 private:
 	Vector2D* prevMousePos;

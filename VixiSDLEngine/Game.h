@@ -2,6 +2,7 @@
 #include "libDependecies.h";
 #include "AssetManager.h"
 #include "InputManager.h"
+#include <windows.h>
 
 class ColliderComponent;
 class AssetManager;
@@ -48,7 +49,7 @@ public:
 
 private:
 
-	
+
 	Uint64 lastUpdateEnd = 0;
 	int cnt = 0;
 	

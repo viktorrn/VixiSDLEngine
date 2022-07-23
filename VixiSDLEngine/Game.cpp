@@ -8,6 +8,7 @@
 #include "CellTileMap.h"
 
 
+
 SDL_Renderer* Game::renderer = nullptr;
 Manager manager;
 AssetManager* Game::assets = new AssetManager(&manager);
@@ -36,12 +37,49 @@ Game::~Game()
 
 }
 
+void ClearScreen()
+{
+	HANDLE                     hStdOut;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD                      count;
+	DWORD                      cellCount;
+	COORD                      homeCoords = { 0, 0 };
+
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+	/* Get the number of cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
+	cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+
+	/* Fill the entire buffer with spaces */
+	if (!FillConsoleOutputCharacter(
+		hStdOut,
+		(TCHAR)' ',
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Fill the entire buffer with the current colors and attributes */
+	if (!FillConsoleOutputAttribute(
+		hStdOut,
+		csbi.wAttributes,
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Move the cursor home */
+	SetConsoleCursorPosition(hStdOut, homeCoords);
+}
+
 void Game::Init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
 	srand((int)time(0));
 	// some required setting values
-	drawScale = 2.0f;
+	drawScale = 32.0f;
 	tileSize = 4;
 
 	if (fullscreen)
@@ -103,13 +141,14 @@ void Game::HandleEvents()
 }
 void Game::Update()
 {
-	
+
+	ClearScreen();
 	Uint32 now = SDL_GetTicks();
 	Game::delta = (now - lastUpdateEnd) / 1000.0f;
 	lastUpdateEnd = now;
-
+	cout << delta*1000.0f << " ms " << endl;
 	float dt = 1.0f / 60.0f;
-
+	
 	/*
 	if (delta > dt)
 		{	
